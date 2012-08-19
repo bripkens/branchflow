@@ -1,5 +1,11 @@
 #!/bin/node
 
+function successHandler(log) {
+  console.log(log);
+  console.log('#################');
+  console.log(require('./src/model').Repository.fromLog(log));
+};
+
 require('./src/git-parser')({ path: 'test/input.log', encoding: 'utf8' },
-    console.log,
+    successHandler,
     console.error);

@@ -13,7 +13,8 @@
     "log"
   ],
   "dependencies" : {
-    "lazy" :  "1.0.x"
+    "lazy" :  "1.0.x",
+    "moment": ">= 1.2.x"
   },
   "devDependencies": {
     "vows": "0.6.x"

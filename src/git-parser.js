@@ -1,4 +1,8 @@
+// Sun Aug 12 09:37:23 2012 +0200
 var io = require('./ioutils'),
+  moment = require('moment'),
+  defaultBranchName = 'master',
+  dateFormat = 'ddd MMM DD HH:mm:ss YYYY Z',
   commitLineRegex = /^commit ([a-z0-9]{40,})( \((HEAD, )?(.*)\))?$/i,
   metaDataLines = [
     {
@@ -11,8 +15,9 @@ var io = require('./ioutils'),
       groups: [1, 2]
     }, {
       keys: ['date'],
-      regex: /^Date: (.*)$/i,
-      groups: [1]
+      regex: /^Date:\s*(.*)$/i,
+      groups: [1],
+      processor: [parseDate]
     }
   ];
 
@@ -47,12 +52,9 @@ function createNewLogEntry(line, log) {
   var match = line.match(commitLineRegex);
 
   var newEntry = {
-    commit: match[1]
+    commit: match[1],
+    branch: match[4] || defaultBranchName
   };
-
-  if (match[4]) {
-    newEntry.branch = match[4];
-  }
 
   log.push(newEntry);
 };
@@ -74,9 +76,14 @@ function parseMetaDataLines(line, log) {
 function extractMetaDataFromMatchedLine(metaDataLine, match, logEntry) {
   for (var i = 0; i < metaDataLine.keys.length; i++) {
     var key = metaDataLine.keys[i],
-      group = metaDataLine.groups[i];
+      group = metaDataLine.groups[i],
+      value = match[group];
 
-      writeNestedProperty(logEntry, key, match[group]);
+    if (metaDataLine.processor !== undefined && metaDataLine.processor[i] !== undefined) {
+      value = metaDataLine.processor[i](value);
+    }
+
+    writeNestedProperty(logEntry, key, value);
   }
 };
 
@@ -102,4 +109,8 @@ function parseComment(line, log) {
 
   logEntry.comment = logEntry.comment || '';
   logEntry.comment = logEntry.comment + line;
+};
+
+function parseDate(dateString) {
+  return moment(dateString, dateFormat);
 };
