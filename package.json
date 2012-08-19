@@ -1,0 +1,22 @@
+{
+  "name": "branchflow",
+  "version": "0.1.0",
+  "author": "Ben Ripkens <bripkens.dev@gmail.com>",
+  "description": "Keep track of branches and merges.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bripkens/branchflow.git"
+  },
+  "keywords": [
+    "branch",
+    "git",
+    "log"
+  ],
+  "dependencies" : {
+    "lazy" :  "1.0.x"
+  },
+  "license": "MIT",
+  "engine": {
+    "node": ">=0.6"
+  }
+}
