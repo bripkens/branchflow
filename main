@@ -1,6 +1,5 @@
 #!/bin/node
 
-require('./git-parser')
-  .parseLog({ path: 'input.log', encoding: 'utf8' },
+require('./src/git-parser')({ path: 'test/input.log', encoding: 'utf8' },
     console.log,
     console.error);

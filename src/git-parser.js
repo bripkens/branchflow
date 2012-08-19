@@ -28,7 +28,7 @@ function parseLog(file, resultCallback, errorCallback) {
   });
 };
 
-module.exports.parseLog = parseLog;
+module.exports = parseLog;
 
 function parseLine(line, log) {
   if (line.match(commitLineRegex)) {
