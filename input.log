@@ -1,0 +1,30 @@
+commit c3952cf3bfe66a9ca95e0ad3ca59e4f19c347705 (HEAD, master)
+Merge: cbb34a3 de8c04c
+Author: Ben Ripkens <bripkens.dev@gmail.com>
+Date:   Sun Aug 12 09:38:01 2012 +0200
+
+    Fixed conflict.
+
+commit de8c04c345cfb8faa46e095e8bfe7b9227055418 (develop)
+Author: Ben Ripkens <bripkens.dev@gmail.com>
+Date:   Sun Aug 12 09:37:23 2012 +0200
+
+    Mehr <C3><84>nderung.
+
+commit cbb34a30b94587d245eba122ddc3d589be599fa5
+Author: Ben Ripkens <bripkens.dev@gmail.com>
+Date:   Sun Aug 12 09:36:20 2012 +0200
+
+    Fixed the file which was retrieved from the develop branch.
+
+commit 92d6d4806b43fac9b8a9e9a63c2cf131c03f51bf
+Author: Ben Ripkens <bripkens.dev@gmail.com>
+Date:   Sun Aug 12 09:33:18 2012 +0200
+
+    Added a file on the develop branch
+
+commit 7d0ea1661289a7318f007f10e66aa3e975789808
+Author: Ben Ripkens <bripkens.dev@gmail.com>
+Date:   Sun Aug 12 09:32:32 2012 +0200
+
+    Initial commit
