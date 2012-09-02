@@ -1,4 +1,3 @@
-// Sun Aug 12 09:37:23 2012 +0200
 var io = require('./ioutils'),
   moment = require('moment'),
   defaultBranchName = 'master',

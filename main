@@ -2,10 +2,8 @@
 
 function successHandler(log) {
   console.log(log);
-  console.log('#################');
-  console.log(require('./src/model').Repository.fromLog(log));
 };
 
-require('./src/git-parser')({ path: 'test/input.log', encoding: 'utf8' },
+require('./src/parser/hg')({ path: 'test/hg.log.private', encoding: 'utf8' },
     successHandler,
     console.error);
