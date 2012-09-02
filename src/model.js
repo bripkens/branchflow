@@ -158,7 +158,7 @@ Branch.prototype.isLastCommit = function(commit) {
  */
 function Commit() {
   this.hash = null;
-  this.revision = null;
+  this.revision = -1;
   this.date = null;
   this.author = null;
   this.branch = null;

@@ -23,9 +23,10 @@ vows.describe('Parser: Mercurial').addBatch({
 
       assert.equal(commit.parents.length, 2);
 
-      var one = commit.parents[0],
-        two = commit.parents[1];
-      // TODO check hashes of parents
+      testutils.assert.equal(commit.parents[0].hash, '52324c976823',
+        '46272b255675');
+      testutils.assert.equal(commit.parents[1].hash, '52324c976823',
+        '46272b255675');
     },
 
     'default branch is identified': function(repo, err) {
@@ -35,6 +36,40 @@ vows.describe('Parser: Mercurial').addBatch({
 
     'branches are identified': function(repo, err) {
       assert.equal(repo.getCommit('9ee04bfe4fb7').branch.name, 'develop');
+    },
+
+    '(local) revision numbers are set': function(repo, err) {
+      for (var i = repo.commits.length - 1; i >= 0; i--) {
+        var revision = repo.commits[i].revision;
+
+        // zero is not a truthy value, so just ignore it.
+        if (revision !== 0) {
+          assert(revision);
+        }
+      }
+    },
+
+    'every commit has a parent revision': function(repo, err) {
+      for (var i = repo.commits.length - 1; i >= 0; i--) {
+        var commit = repo.commits[i];
+
+        if (commit.revision > 0 && commit.parents.length === 0) {
+          testutils.assert.fail('Every commit (except the first one) should ' +
+            'have a parent.');
+        }
+      }
+
+      // first commit overall
+      var commit = repo.getCommit('a1f1399bf6d7');
+      assert.equal(commit.parents.length, 0);
+
+      // first commit in a branch
+      commit = repo.getCommit('9ee04bfe4fb7');
+      assert.equal(commit.parents[0], repo.getCommit('69dde1b48a92'));
+
+      // a commit without any other activities involved
+      commit = repo.getCommit('69dde1b48a92');
+      assert.equal(commit.parents[0], repo.getCommit('a1f1399bf6d7'));
     }
   }
 }).export(module);

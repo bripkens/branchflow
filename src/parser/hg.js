@@ -1,6 +1,7 @@
 var moment = require('moment'),
   ioutils = require('../ioutils')
   model = require('../model'),
+  postprocessor = require('../postprocessor'),
   defaultBranchName = 'default',
   branchFlowDefaultBranchName = require('../def').defaultBranchName;
   defaultTag = 'tip',
@@ -302,13 +303,15 @@ MercurialParser.prototype.parsingFinished = function() {
         commit.tag = repository.addTag(logEntry.tag, commit);
       }
       if (logEntry.leftParent) {
-        commit.parents.push(repository.addBranch(logEntry.leftParent));
+        commit.parents.push(repository.addCommit(logEntry.leftParent));
       }
       if (logEntry.rightParent) {
-        commit.parents.push(repository.addBranch(logEntry.rightParent));
+        commit.parents.push(repository.addCommit(logEntry.rightParent));
       }
     }
   }
+
+  postprocessor.fillOmmitedParents(repository);
 
   this.resultCallback(repository);
 };
