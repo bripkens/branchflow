@@ -1,9 +1,0 @@
-#!/bin/node
-
-function successHandler(log) {
-  console.log(log);
-};
-
-require('./src/parser/hg')({ path: 'test/hg.log.private', encoding: 'utf8' },
-    successHandler,
-    console.error);

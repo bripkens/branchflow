@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "author": "Ben Ripkens <bripkens.dev@gmail.com>",
   "description": "Keep track of branches and merges.",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/bripkens/branchflow.git"
@@ -15,12 +16,16 @@
   "dependencies" : {
     "lazy" :  "1.0.x",
     "moment": ">= 1.2.x",
-    "winston": ">= 0.6.x"
+    "winston": ">= 0.6.x",
+    "express": "3.x",
+    "jade": "*",
+    "less-middleware": "*"
   },
   "devDependencies": {
     "vows": "0.6.x"
   },
   "scripts": {
+    "start": "node src/web",
     "test": "vows --spec"
   },
   "license": "MIT",
