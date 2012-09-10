@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  table
+    thead
+      tr
+
+        th Hash
+        th Date
+        th Branch
+        th Comment
+        th Parents
+    tbody
+      each commit in repo.commits
+        tr
+          td= commit.hash
+          td= commit.date
+          td= commit.branch.name
+          td= commit.comment
+          td
+            each parent in commit.parents
+              p #{parent.hash} (#{parent.branch.name})
