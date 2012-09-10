@@ -1,13 +1,16 @@
 extends layout
 
 block content
-  table
+  h1 Sequential log view
+
+  table.table.table-striped.table-bordered.table-hover
     thead
       tr
 
         th Hash
         th Date
         th Branch
+        th Author
         th Comment
         th Parents
     tbody
@@ -16,6 +19,7 @@ block content
           td= commit.hash
           td= commit.date
           td= commit.branch.name
+          td= commit.author.name
           td= commit.comment
           td
             each parent in commit.parents

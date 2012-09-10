@@ -84,4 +84,20 @@ function findPreviousCommit(branch, commit) {
   }
 
   return null;
-}
+};
+
+/**
+ * @description
+ * Sort commits in a repository by date
+ *
+ * @param {Repository} repo The repository instance which should be sorted
+ * @param {Boolean} [ascending] Whether the commits should be sorted in
+ *  ascending or descending order. Defaults to descending.
+ */
+module.exports.sortCommits = function sortCommits(repo, ascending) {
+  var factor = ascending ? 1 : -1;
+
+  repo.commits.sort(function(commit1, commit2) {
+    return commit1.date.diff(commit2.date) * factor;
+  });
+};

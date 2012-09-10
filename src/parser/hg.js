@@ -312,6 +312,7 @@ MercurialParser.prototype.parsingFinished = function() {
   }
 
   postprocessor.fillOmmitedParents(repository);
+  postprocessor.sortCommits(repository);
 
   this.resultCallback(repository);
 };
