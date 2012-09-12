@@ -8,8 +8,8 @@ var log = new (require('./logger'))(module),
  *
  * A -- B -- C
  *
- * The revisions B and C, no parents would be declared. Fortunately, this
- * information can be obtained by analysing the log. This function fills in
+ * For the revisions B and C, no parents would be declared. Fortunately,
+ * this information can be obtained by analysing the log. This function fills in
  * the omitted parents.
  *
  * @param {@link Repository} A completely parsed repository instance.

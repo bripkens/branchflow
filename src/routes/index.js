@@ -1,5 +1,5 @@
 var user = require('./user'),
-  log = require('../logger')(module);
+  log = new (require('../logger'))(module);
   hgParser = require('../parser/hg'),
   file = {
     path: 'test/hg.log',
