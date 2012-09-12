@@ -28,7 +28,8 @@ var logger = new (winston.Logger)({
       // which is why we enable all levels by default and hack in our own
       // system!
       level: 'debug',
-      timestamp: false
+      timestamp: false,
+      colorize: def.logging.colorize
     })
   ]
 });
@@ -77,7 +78,7 @@ for (var eachLevel in levels) {
     Logger.prototype[level] = function(msg) {
       if (levels[level] >= levels[def.logging.activeLevel]) {
         var args = Array.prototype.slice.call(arguments, 1);
-        var msg = this.prefixMessage(util.format(msg, args));
+        var msg = this.prefixMessage(util.format.apply(this, arguments));
         logger.log(level, msg);
       }
     };
