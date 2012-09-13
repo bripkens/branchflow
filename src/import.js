@@ -1,5 +1,6 @@
 var log = new (require('./logger'))(module),
-  fs = require('fs');
+  fs = require('fs'),
+  databaseImport = require('./persistence/import'),
   argv = require('optimist')
     .usage('Usage: $0 -t [VCS_TYPE] -n [REPOSITORY_NAME] [FILE]')
     .demand(1) // require 1 non-option argument
@@ -44,9 +45,12 @@ function doImport() {
 
   function success(repo) {
     log.info('Successfully parsed the log file. Attempting to import it.');
+    repo.name = repoName;
+    databaseImport(repo);
   };
 
   function error(err) {
+    log.error('Failed to parse the log file.');
     log.error(err);
     process.exit(1);
   };
@@ -58,7 +62,7 @@ if (config) {
   log.info('Overwriting branchflow\'s default configuration.');
   fs.readFile(config, function(err, data) {
     if (err) {
-      log.error('Failed to read config file. Reason %s', err);
+      log.error('Failed to read config file. Reason: %s', err);
       process.exit(1);
     }
 

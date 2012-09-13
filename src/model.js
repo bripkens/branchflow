@@ -6,6 +6,7 @@
  *
  */
 function Repository() {
+  this.name = '';
   this.authors = [];
   this.branches = {};
   this.commits = [];

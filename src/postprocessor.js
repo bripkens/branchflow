@@ -24,7 +24,7 @@ function fillOmmitedParents(repository) {
       if (parentCommit) {
         commit.parents.push(parentCommit);
       } else {
-        log.info('Could not find a parent revision for commit %s.',
+        log.debug('Could not find a parent revision for commit %s.',
           commit.hash);
       }
     }
