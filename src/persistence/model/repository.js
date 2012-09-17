@@ -33,49 +33,23 @@ Repository.prototype.save = utils.save;
 /**
  * @description
  * Creates a new repository instance. This method should generally be used
- * instead of the constructor as it takes care of neo4j initialisation.
+ * instead of the constructor as it takes care of the neo4j initialisation.
  *
  * @param {Object} data Any data associated to a repository node.
  * @param {Function} callback The error/result callback.
  */
-Repository.create = function(data, callback) {
-  var node = db.createNode(data);
-  var repo = new Repository(node);
-
-  node.save(function(err) {
-    if (err) return callback(err);
-
-    node.index(index.name, index.key, index.val, function(err) {
-      if (err) return callback(err);
-
-      callback(null, repo);
-    });
-  });
-};
+Repository.create = utils.newCreateFunction(db, Repository, index);
 
 /**
  * @description
  * Retrieve all repository instances from the data store.
  *
  *                            - BEWARE -
- * This operation may be (depending on the number of nodes) super expensive.
+ * This operation may be (depending on the number of nodes) expensive.
  *
  * @param {Function} callback The error/result callback.
  */
-Repository.getAll = function(callback) {
-  db.getIndexedNodes(index.name, index.key, index.val, function(err, nodes) {
-    if (err && !utils.isIndexNotExistingError(err)) {
-      return callback(err, null);
-    } else if (err) {
-      return callback(null, []);
-    }
-
-    var repositories = nodes.map(function(node) {
-      return new Repository(node);
-    });
-    callback(null, repositories);
-  });
-};
+Repository.getAll = utils.newGetAllFunction(db, Repository, index);
 
 /**
  * @description

@@ -17,7 +17,8 @@ var log = new (require('../../logger'))(module);
  * @return {Boolean} True when the err.message exists and looks like an 'index
  *  not found error'.
  */
-module.exports.isIndexNotExistingError = function isIndexNotExistingError(err) {
+var isIndexNotExistingError = module.exports.isIndexNotExistingError =
+    function isIndexNotExistingError(err) {
   return err !== undefined && err !== null && err.hasOwnProperty('message') &&
     err.message.match(indexNotExistingError) != null;
 };
@@ -115,4 +116,67 @@ module.exports.buildQuery = function buildQuery() {
   }
 
   return query;
+};
+
+/**
+ * @description
+ * Creates a new "create"-function. A create function takes data and a callback
+ * and creates a new node in the data store.
+ *
+ * @param {Neo4jDatabase} db The neo4j database instance.
+ * @param {Function} Clazz The type which should be instantiated and returned.
+ * @param {Object} index The index under which the node should be tracked.
+ * @param {String} index.name The index's name.
+ * @param {String} index.key The index's key.
+ * @param {String} index.val The index's value.
+ * @return {Function} A new function which takes two arguments (data, callback)
+ *  that can be used to create new nodes of the specified type.
+ */
+module.exports.newCreateFunction = function(db, Clazz, index) {
+  return function(data, callback) {
+    var node = db.createNode(data);
+    var instance = new Clazz(node);
+
+    node.save(function(err) {
+      if (err) return callback(err);
+
+      node.index(index.name, index.key, index.val, function(err) {
+        if (err) return callback(err);
+
+        callback(null, instance);
+      });
+    });
+  };
+};
+
+/**
+ * @description
+ * Creates a new "getAll"-function. A getAll function takes a callback
+ * and passes it all the nodes which are indexed under the given index.
+ *
+ * @param {Neo4jDatabase} db The neo4j database instance.
+ * @param {Function} Clazz The type which should be instantiated and returned.
+ * @param {Object} index The index under which the node should be tracked.
+ * @param {String} index.name The index's name.
+ * @param {String} index.key The index's key.
+ * @param {String} index.val The index's value.
+ * @return {Function} A new function which takes two arguments (data, callback)
+ *  that can be used to create new nodes of the specified type.
+ */
+module.exports.newGetAllFunction = function(db, Clazz, index) {
+  return function(callback) {
+    db.getIndexedNodes(index.name, index.key, index.val, function(err, nodes) {
+      if (err && !isIndexNotExistingError(err)) {
+        return callback(err, null);
+      } else if (err) {
+        // index does not exist
+        return callback(null, []);
+      }
+
+      var instances = nodes.map(function(node) {
+        return new Clazz(node);
+      });
+      callback(null, instances);
+    });
+  };
 };
