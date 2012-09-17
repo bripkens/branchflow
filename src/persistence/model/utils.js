@@ -18,7 +18,7 @@ var log = new (require('../../logger'))(module);
  *  not found error'.
  */
 module.exports.isIndexNotExistingError = function isIndexNotExistingError(err) {
-  return err.hasOwnProperty('message') &&
+  return err !== undefined && err !== null && err.hasOwnProperty('message') &&
     err.message.match(indexNotExistingError) != null;
 };
 
@@ -102,12 +102,15 @@ module.exports.buildQuery = function buildQuery() {
     }
   }
 
-  // replace all the placeholders
   query = queryParts.join('\n');
-  placeholders = arguments[i];
-  for (key in placeholders) {
-    if (placeholders.hasOwnProperty(key)) {
-      query = query.replace(key, placeholders[key]);
+
+  // replace all the placeholders
+  if (!previousArgumentWasString) {
+    placeholders = arguments[i - 1];
+    for (key in placeholders) {
+      if (placeholders.hasOwnProperty(key)) {
+        query = query.replace(key, placeholders[key]);
+      }
     }
   }
 
