@@ -1,26 +1,35 @@
 var log = new (require('../logger'))(module),
   model = require('./model');
 
+function importRootNode(repo) {
+
+};
+
 module.exports = function(repo) {
 	log.info('Importing commits into database.');
 
-  // model.Repository.create({ name: repo.name }, function(err, repo) {
-  //   // console.log('err: ', err);
-  //   // console.log('repo: ', repo);
-  //   // console.log('repo.id: ', repo.id);
+  log.info('Trying to locate existing import for repository %s.', repo.name);
+  model.Repository.getByName(repo.name, function(err, existingRepo) {
+    if (err) {
+      log.error('Failed to retrieve repository from database.', err);
+      process.exit(1);
+    }
 
-  //   model.Repository.getAll(function(err, repos) {
-  //     if (err) {
-  //       log.error(err);
-  //     }
+    if (existingRepo) {
+      log.info('Existing import found. Using repository with ID %d.',
+        existingRepo.id);
+    } else {
+      log.info('No existing import found for repository, creating new import.');
 
-  //     for (var i = 0; i < repos.length; i++) {
-  //       console.log(repos[i].name);
-  //     }
-  //   });
-  // });
+      model.Repository.create({ name: repo.name }, function(err, repo) {
+        if (err) {
+          log.error('Failed to create repository in database.', err);
+          process.exit(1);
+        }
 
-  model.Repository.getByName('icis+', function(err, repo) {
-    console.log('repo.name: ', repo.name);
+        log.info('Successfully created new repository in database with ID %d.',
+          repo.id);
+      });
+    }
   });
 };
