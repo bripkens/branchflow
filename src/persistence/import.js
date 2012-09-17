@@ -1,5 +1,5 @@
 var log = new (require('../logger'))(module),
-  model = require('./model');
+  Repository = require('./model/Repository');
 
 function importRootNode(repo) {
 
@@ -9,7 +9,7 @@ module.exports = function(repo) {
 	log.info('Importing commits into database.');
 
   log.info('Trying to locate existing import for repository %s.', repo.name);
-  model.Repository.getByName(repo.name, function(err, existingRepo) {
+  Repository.getByName(repo.name, function(err, existingRepo) {
     if (err) {
       log.error('Failed to retrieve repository from database.', err);
       process.exit(1);
@@ -21,7 +21,7 @@ module.exports = function(repo) {
     } else {
       log.info('No existing import found for repository, creating new import.');
 
-      model.Repository.create({ name: repo.name }, function(err, repo) {
+      Repository.create({ name: repo.name }, function(err, repo) {
         if (err) {
           log.error('Failed to create repository in database.', err);
           process.exit(1);
