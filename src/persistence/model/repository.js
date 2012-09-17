@@ -85,14 +85,15 @@ Repository.getAll = function(callback) {
  * @param {Function} callback The error/result callback.
  */
 Repository.getByName = function(name, callback) {
-  var query = ["START node=node:index.name(index.key = 'index.val')",
+  var query;
+  query = utils.buildQuery("START node=node:indexName(indexKey = 'indexVal')",
                "WHERE node.name = {name}",
                "RETURN node",
-               "LIMIT 1"
-  ].join('\n')
-    .replace('index.name', index.name)
-    .replace('index.key', index.key)
-    .replace('index.val', index.val);
+               "LIMIT 1", {
+                'indexName': index.name,
+                'indexKey': index.key,
+                'indexVal': index.val,
+               });
 
   var params = {
     name: name

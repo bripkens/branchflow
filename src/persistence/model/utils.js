@@ -64,3 +64,52 @@ module.exports.addProperty = function addProperty(clazz, prop, isData) {
 module.exports.save = function save(callback) {
   this._node.save(callback);
 };
+
+/**
+ * @∂escription
+ * Convenience function to build neo4j queries. This function takes a variable
+ * number of arguments. Starting from the first argument, this function
+ * joins all the strings that it finds using a newline character and then
+ * replaces all the placeholders.
+ *
+ * @example
+ * buildQuery("START node=node:index.name(index.key = 'index.val')",
+ *            "WHERE node.name = {name}",
+ *             "RETURN node",
+ *             "LIMIT 1", {
+ *               'index.name': 'someName',
+ *               'index.key': 'someKey',
+ *               'index.val': 'someKVal'
+ *             });
+ */
+module.exports.buildQuery = function buildQuery() {
+  var queryParts = [],
+    previousArgumentWasString = true,
+    i,
+    arg,
+    query,
+    placeholders,
+    key;
+
+  // extract all query parts
+  for (i = 0; i < arguments.length && previousArgumentWasString; i++) {
+    arg = arguments[i];
+
+    if (typeof(arg) === 'string') {
+      queryParts.push(arg);
+    } else {
+      previousArgumentWasString = false;
+    }
+  }
+
+  // replace all the placeholders
+  query = queryParts.join('\n');
+  placeholders = arguments[i];
+  for (key in placeholders) {
+    if (placeholders.hasOwnProperty(key)) {
+      query = query.replace(key, placeholders[key]);
+    }
+  }
+
+  return query;
+};
