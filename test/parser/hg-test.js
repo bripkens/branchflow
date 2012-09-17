@@ -70,6 +70,23 @@ vows.describe('Parser: Mercurial').addBatch({
       // a commit without any other activities involved
       commit = repo.getCommit('69dde1b48a92');
       assert.equal(commit.parents[0], repo.getCommit('a1f1399bf6d7'));
+    },
+
+    'authors are found and emails extracted': function(repo, err) {
+      var tom, john, i, author;
+
+      for (i = 0; i < repo.authors.length; i++) {
+        author = repo.authors[i];
+        if (author.name.indexOf('Tom') === 0) {
+          tom = author;
+        } else if (author.name.indexOf('John') === 0) {
+          john = author;
+        }
+      }
+
+      assert.equal(john.name, 'John Doe');
+      assert.equal(tom.name, 'Tom Mason');
+      assert.equal(tom.email, 'tom.mason@example.com');
     }
   }
 }).export(module);

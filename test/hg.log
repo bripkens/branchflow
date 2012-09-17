@@ -2,7 +2,7 @@ changeset:   5:1f626050434f
 tag:         tip
 parent:      3:52324c976823
 parent:      4:46272b255675
-user:        Tom Mason
+user:        Tom Mason <tom.mason@example.com>
 date:        Sun Sep 02 07:37:14 2012 +0200
 summary:     Merged develop to default.
 
@@ -10,7 +10,7 @@ changeset:   4:46272b255675
 branch:      develop
 parent:      2:9ee04bfe4fb7
 parent:      3:52324c976823
-user:        Tom Mason
+user:        Tom Mason <tom.mason@example.com>
 date:        Sun Sep 02 07:36:35 2012 +0200
 summary:     Merged with default
 
@@ -22,12 +22,12 @@ summary:     Added a problems sections on branching
 
 changeset:   2:9ee04bfe4fb7
 branch:      develop
-user:        Tom Mason
+user:        Tom Mason <tom.mason@example.com>
 date:        Sun Sep 02 07:34:42 2012 +0200
 summary:     Adding a fancy heading!
 
 changeset:   1:69dde1b48a92
-user:        Tom Mason
+user:        Tom Mason <tom.mason@example.com>
 date:        Sun Sep 02 07:33:32 2012 +0200
 summary:     Fixed a type
 

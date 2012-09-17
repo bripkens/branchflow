@@ -1,5 +1,6 @@
 var log = new (require('./logger'))(module),
-  def = require('./def');
+  def = require('./def'),
+  commonAuthorNameStyle = /(.*?) *<(.*)>/i;
 
 /**
  * @description
@@ -100,4 +101,20 @@ module.exports.sortCommits = function sortCommits(repo, ascending) {
   repo.commits.sort(function(commit1, commit2) {
     return commit1.date.diff(commit2.date) * factor;
   });
+};
+
+module.exports.fillAuthorEmails = function fillAuthorEmails(repo) {
+  var i,
+    author,
+    match;
+
+  for (i = 0; i < repo.authors.length; i++) {
+    author = repo.authors[i];
+    match = author.name.match(commonAuthorNameStyle);
+
+    if (match) {
+      author.name = match[1];
+      author.email = match[2];
+    }
+  }
 };

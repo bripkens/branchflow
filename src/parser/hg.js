@@ -314,5 +314,7 @@ MercurialParser.prototype.parsingFinished = function() {
   postprocessor.fillOmmitedParents(repository);
   postprocessor.sortCommits(repository);
 
+  postprocessor.fillAuthorEmails(repository);
+
   this.resultCallback(repository);
 };
