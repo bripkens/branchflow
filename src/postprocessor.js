@@ -103,6 +103,14 @@ module.exports.sortCommits = function sortCommits(repo, ascending) {
   });
 };
 
+/**
+ * @description
+ * Try to extract authors' email adresses from their name by using the common
+ * commit author style: "Forename lastname <email>".
+ *
+ * @param {Repository} repo THe repository for which authors email addresses
+ *  should be extracted.
+ */
 module.exports.fillAuthorEmails = function fillAuthorEmails(repo) {
   var i,
     author,
