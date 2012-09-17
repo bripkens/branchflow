@@ -83,7 +83,7 @@ module.exports.save = function save(callback) {
  *               'index.val': 'someKVal'
  *             });
  */
-module.exports.buildQuery = function buildQuery() {
+var buildQuery = module.exports.buildQuery = function buildQuery() {
   var queryParts = [],
     previousArgumentWasString = true,
     i,
@@ -178,5 +178,51 @@ module.exports.newGetAllFunction = function(db, Clazz, index) {
       });
       callback(null, instances);
     });
+  };
+};
+
+/**
+ * @description
+ * Creates a new "getBy"-function. A getBy function takes a value and a
+ * callback, tries to find a node which has property with this value and
+ * calls the callback with the matching node.
+ *
+ * @param {Neo4jDatabase} db The neo4j database instance.
+ * @param {Function} Clazz The type which should be instantiated and returned.
+ * @param {Object} index The index under which the node should be tracked.
+ * @param {String} index.name The index's name.
+ * @param {String} index.key The index's key.
+ * @param {String} index.val The index's value.
+ * @param {String} propName The name of the property.
+ * @return {Function} A new function which takes two arguments (data, callback)
+ *  that can be used to find new nodes of the specified type.
+ */
+module.exports.newGetByDataFunction = function(db, Clazz, index, propName) {
+  return function(data, callback) {
+    var query = buildQuery("START node=node:indexName(indexKey = 'indexVal')",
+                           "WHERE node.propName = {data}",
+                           "RETURN node",
+                           "LIMIT 1", {
+                             'propName': propName,
+                             'indexName': index.name,
+                             'indexKey': index.key,
+                             'indexVal': index.val,
+                           });
+
+  var params = {
+    data: data
+  };
+
+  db.query(query, params, function(err, nodes) {
+    if (err && isIndexNotExistingError(err)) {
+      return callback(null, null);
+    } else if (err) {
+      return callback(err, null);
+    } else if (nodes.length === 0) {
+      return callback(null, null);
+    }
+
+    callback(null, new Clazz(nodes[0].node));
+  });
   };
 };

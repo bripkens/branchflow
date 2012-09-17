@@ -24,6 +24,7 @@ var def = require('../../def'),
 var Repository = module.exports = function Repository(_node) {
   this._node = _node;
 };
+
 utils.addProperty(Repository, 'id');
 utils.addProperty(Repository, 'exists');
 utils.addProperty(Repository, 'name', true);
@@ -58,30 +59,4 @@ Repository.getAll = utils.newGetAllFunction(db, Repository, index);
  * @param {String} name The repository's name.
  * @param {Function} callback The error/result callback.
  */
-Repository.getByName = function(name, callback) {
-  var query;
-  query = utils.buildQuery("START node=node:indexName(indexKey = 'indexVal')",
-               "WHERE node.name = {name}",
-               "RETURN node",
-               "LIMIT 1", {
-                'indexName': index.name,
-                'indexKey': index.key,
-                'indexVal': index.val,
-               });
-
-  var params = {
-    name: name
-  };
-
-  db.query(query, params, function(err, nodes) {
-    if (err && utils.isIndexNotExistingError(err)) {
-      return callback(null, null);
-    } else if (err) {
-      return callback(err, null);
-    } else if (nodes.length === 0) {
-      return callback(null, null);
-    }
-
-    callback(null, new Repository(nodes[0].node));
-  });
-};
+Repository.getByName = utils.newGetByDataFunction(db, Repository, index, 'name');
