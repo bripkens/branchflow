@@ -7,33 +7,32 @@ var def = require('../../def'),
   index = {
     name: 'nodes',
     key: 'type',
-    val: 'author'
+    val: 'tag'
   };
 
 /**
- * @class Author
+ * @class Tag
  *
  * @constructor
- * Creates a new neo4j-aware author model. This function should generally
+ * Creates a new neo4j-aware Tag model. This function should generally
  * not be invoked directly, but instead through the generator function
- * Author.create(...).
+ * Tag.create(...).
  *
  * @param {Neo4jNode} _node neo4j's internal node. Strictly required. Without
  *  this node, all attempts to access properties will fail.
  */
-var Author = module.exports = function Author(_node) {
+var Tag = module.exports = function Tag(_node) {
   this._node = _node;
 };
 
-utils.addProperty(Author, 'id');
-utils.addProperty(Author, 'exists');
-utils.addProperty(Author, 'name', true);
-utils.addProperty(Author, 'email', true);
+utils.addProperty(Tag, 'id');
+utils.addProperty(Tag, 'exists');
+utils.addProperty(Tag, 'name', true);
 
-Author.prototype.save = utils.save;
+Tag.prototype.save = utils.save;
 
-Author.prototype.contributedTo = function(repo, callback) {
-  this._node.createRelationshipTo(repo._node, 'contributedTo',
+Tag.prototype.belongsTo = function(repo, callback) {
+  this._node.createRelationshipTo(repo._node, 'belongsTo',
       {},
       function (err, rel) {
     callback(err);
@@ -42,30 +41,30 @@ Author.prototype.contributedTo = function(repo, callback) {
 
 /**
  * @description
- * Creates a new Author instance. This method should generally be used
+ * Creates a new Tag instance. This method should generally be used
  * instead of the constructor as it takes care of the neo4j initialisation.
  *
- * @param {Object} data Any data associated to a Author node.
+ * @param {Object} data Any data associated to a Tag node.
  * @param {Function} callback The error/result callback.
  */
-Author.create = utils.newCreateFunction(db, Author, index);
+Tag.create = utils.newCreateFunction(db, Tag, index);
 
 /**
  * @description
- * Retrieve all Author instances from the data store.
+ * Retrieve all Tag instances from the data store.
  *
  *                            - BEWARE -
  * This operation may be (depending on the number of nodes) expensive.
  *
  * @param {Function} callback The error/result callback.
  */
-Author.getAll = utils.newGetAllFunction(db, Author, index);
+Tag.getAll = utils.newGetAllFunction(db, Tag, index);
 
 /**
  * @description
- * Get a single Author by name. The name must be an exact match.
+ * Get a single Tag by name. The name must be an exact match.
  *
- * @param {String} name The Author's name.
+ * @param {String} name The Tag's name.
  * @param {Function} callback The error/result callback.
  */
-Author.getByName = utils.newGetByDataFunction(db, Author, index, 'name');
+Tag.getByName = utils.newGetByDataFunction(db, Tag, index, 'name');
