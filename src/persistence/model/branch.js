@@ -7,32 +7,32 @@ var def = require('../../def'),
   index = {
     name: 'nodes',
     key: 'type',
-    val: 'tag'
+    val: 'branch'
   };
 
 /**
- * @class Tag
+ * @class Branch
  *
  * @constructor
- * Creates a new neo4j-aware Tag model. This function should generally
+ * Creates a new neo4j-aware Branch model. This function should generally
  * not be invoked directly, but instead through the generator function
- * Tag.create(...).
+ * Branch.create(...).
  *
  * @param {Neo4jNode} _node neo4j's internal node. Strictly required. Without
  *  this node, all attempts to access properties will fail.
  */
-var Tag = module.exports = function Tag(_node) {
+var Branch = module.exports = function Branch(_node) {
   this._node = _node;
 };
 
-utils.addProperty(Tag, 'id');
-utils.addProperty(Tag, 'exists');
-utils.addProperty(Tag, 'name', true);
+utils.addProperty(Branch, 'id');
+utils.addProperty(Branch, 'exists');
+utils.addProperty(Branch, 'name', true);
 
-Tag.prototype.save = utils.save;
+Branch.prototype.save = utils.save;
 
-Tag.prototype.tagged = function(commit, callback) {
-  this._node.createRelationshipTo(commit._node, 'tagged',
+Branch.prototype.belongsTo = function(repo, callback) {
+  this._node.createRelationshipTo(repo._node, 'belongsTo',
       {},
       function (err, rel) {
     callback(err);
@@ -41,30 +41,30 @@ Tag.prototype.tagged = function(commit, callback) {
 
 /**
  * @description
- * Creates a new Tag instance. This method should generally be used
+ * Creates a new Branch instance. This method should generally be used
  * instead of the constructor as it takes care of the neo4j initialisation.
  *
- * @param {Object} data Any data associated to a Tag node.
+ * @param {Object} data Any data associated to a Branch node.
  * @param {Function} callback The error/result callback.
  */
-Tag.create = utils.newCreateFunction(db, Tag, index);
+Branch.create = utils.newCreateFunction(db, Branch, index);
 
 /**
  * @description
- * Retrieve all Tag instances from the data store.
+ * Retrieve all Branch instances from the data store.
  *
  *                            - BEWARE -
  * This operation may be (depending on the number of nodes) expensive.
  *
  * @param {Function} callback The error/result callback.
  */
-Tag.getAll = utils.newGetAllFunction(db, Tag, index);
+Branch.getAll = utils.newGetAllFunction(db, Branch, index);
 
 /**
  * @description
- * Get a single Tag by name. The name must be an exact match.
+ * Get a single Branch by name. The name must be an exact match.
  *
- * @param {String} name The Tag's name.
+ * @param {String} name The Branch's name.
  * @param {Function} callback The error/result callback.
  */
-Tag.getByName = utils.newGetByDataFunction(db, Tag, index, 'name');
+Branch.getByName = utils.newGetByDataFunction(db, Branch, index, 'name');
