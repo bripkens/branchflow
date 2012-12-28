@@ -1,3 +1,4 @@
+#!/usr/local/bin/node
 var neo4j = require('./src/persistence/neo4j');
 
 neo4j.createNode({ name: 'develop', type: 'branch'}, function(err, branch) {
